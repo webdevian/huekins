@@ -1,4 +1,5 @@
 # HueKins
+[![Build Status](https://travis-ci.org/webdevian/huekins.svg?branch=master)](https://travis-ci.org/webdevian/huekins)
 
 Connect your JenkinsCI server to a Philips Hue light. HueKins polls JenkinsCI job(s) for the lastBuild status and set the colour of a Philips Hue bulb accordingly
 
