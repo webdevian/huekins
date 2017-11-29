@@ -1,0 +1,40 @@
+{
+  "name": "huekins",
+  "version": "0.0.1",
+  "description": "Link between Philips Hue and Jenkins CI",
+  "main": "index.js",
+  "scripts": {
+    "test": "eslint **/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/webdevian/huekins.git"
+  },
+  "keywords": [
+    "philips",
+    "hue",
+    "jenkins",
+    "ci",
+    "build",
+    "status",
+    "build",
+    "light",
+    "build",
+    "indicator"
+  ],
+  "author": "Ian Egner <@ianegner>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/webdevian/huekins/issues"
+  },
+  "homepage": "https://github.com/webdevian/huekins#readme",
+  "dependencies": {
+    "dotenv": "^4.0.0",
+    "huejay": "^1.7.2",
+    "jenkins": "^0.20.1",
+    "repeat": "^0.0.6"
+  },
+  "devDependencies": {
+    "apc-style": "^0.4.3"
+  }
+}
