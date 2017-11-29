@@ -1,4 +1,5 @@
 # HueKins
+[![Build Status](https://travis-ci.org/webdevian/huekins.svg?branch=master)](https://travis-ci.org/webdevian/huekins)
 
 [![Greenkeeper badge](https://badges.greenkeeper.io/webdevian/huekins.svg)](https://greenkeeper.io/)
 

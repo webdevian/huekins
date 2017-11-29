@@ -31,8 +31,7 @@
   "dependencies": {
     "dotenv": "^4.0.0",
     "huejay": "^1.7.2",
-    "jenkins": "^0.20.1",
-    "repeat": "^0.0.6"
+    "jenkins": "^0.20.1"
   },
   "devDependencies": {
     "apc-style": "^0.4.3"
