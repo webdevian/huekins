@@ -2,6 +2,11 @@ const Huejay = require('huejay')
 require('dotenv').config()
 const { env } = process
 
+process.on('unhandledRejection', error => {
+  console.log(error.message)
+  process.exit()
+})
+
 class HueKins {
   constructor () {
     this.hue = new Huejay.Client({
