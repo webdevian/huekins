@@ -3,7 +3,7 @@ require('dotenv').config()
 const { env } = process
 
 process.on('unhandledRejection', error => {
-  console.log(error.message)
+  console.error(error.message)
   process.exit()
 })
 
@@ -27,21 +27,25 @@ class HueKins {
 
   async getInfo () {
     const bridge = await this.hue.bridge.get()
-    console.log(`Retrieved bridge ${bridge.name}`)
-    console.log('  Id:', bridge.id)
-    console.log('  Model Id:', bridge.modelId)
-    console.log('  Model Name:', bridge.model.name)
+    console.info(`Retrieved bridge ${bridge.name}`)
+    console.info('  Id:', bridge.id)
+    console.info('  Model Id:', bridge.modelId)
+    console.info('  Model Name:', bridge.model.name)
 
     this.bridge = bridge
 
     const lights = await this.hue.lights.getAll()
-    console.log('Lights connected:')
+    console.info('Lights connected:')
 
     lights.map(light => {
-      console.log(`  - ${light.attributes.attributes.name}`)
+      console.info(`  - ${light.attributes.attributes.name}`)
     })
 
-    this.activeLight = lights.filter(light => light.attributes.attributes.name === env.LIGHT_NAME)[0]
+    try {
+      this.activeLight = lights.filter(light => light.attributes.attributes.name === env.LIGHT_NAME)[0]
+    } catch (e) {
+      throw new Error(`Cannot connect to selected light - ${env.LIGHT_NAME}`)
+    }
 
     this.lights = lights
   }
