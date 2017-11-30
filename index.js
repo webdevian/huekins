@@ -35,10 +35,12 @@ class HueKins {
     this.bridge = bridge
 
     const lights = await this.hue.lights.getAll()
-    console.info('Lights connected:')
+    console.info('\nLights connected:')
 
     lights.map(light => {
-      console.info(`  - ${light.attributes.attributes.name}`)
+      if (light.state.attributes.reachable) {
+        console.info(`  - ${light.attributes.attributes.name}`)
+      }
     })
 
     try {
@@ -50,37 +52,31 @@ class HueKins {
     this.lights = lights
   }
 
-  flashLight () {
+  failingLight () {
     this.activeLight.alert = 'lselect'
-  }
-
-  async failingLight () {
-    this.flashLight()
     this.activeLight.hue = 0
-    await this.hue.lights.save(this.activeLight)
   }
 
-  async unstableLight () {
-    this.flashLight()
+  unstableLight () {
     this.activeLight.hue = 25500 / 2
-    await this.hue.lights.save(this.activeLight)
   }
 
-  async passingLight () {
+  passingLight () {
     this.activeLight.hue = 25500
-    await this.hue.lights.save(this.activeLight)
   }
 
-  async buildingLight () {
-    this.flashLight()
+  buildingLight () {
     this.activeLight.hue = 46920
-    await this.hue.lights.save(this.activeLight)
   }
 
-  async getStatus () {
+  async getStatus (debug) {
     let building = false
     let unstable = false
     let failing = false
+
+    if (debug) {
+      console.info('\nJob Statuses:')
+    }
 
     await Promise.all(this.jobNames.map(async jobName => {
       const job = await this.jenkins.job.get(jobName)
@@ -98,8 +94,16 @@ class HueKins {
         building = true
       }
 
+      if (debug) {
+        console.info(`  - ${jobName} - Status: ${lastBuild.result}`)
+      }
+
       return lastBuild.result
     }))
+
+    if (debug) {
+      console.info('\n')
+    }
 
     if (building) {
       return 'building'
@@ -116,10 +120,12 @@ class HueKins {
     return 'passing'
   }
 
-  async setStatus () {
-    const newStatus = await this.getStatus()
+  async setStatus (debug) {
+    const newStatus = await this.getStatus(debug)
     if (this.status !== newStatus) {
-      console.info(`Status has changed to ${newStatus}`)
+      if (!debug) {
+        console.info(`Status has changed to ${newStatus}`)
+      }
       this.status = newStatus
       await this.setLight(newStatus)
     } else {
@@ -128,11 +134,13 @@ class HueKins {
   }
 
   async setLight (status) {
-    await this[`${status}Light`]()
+    this.activeLight.saturation = 254
+    this[`${status}Light`]()
+    await this.hue.lights.save(this.activeLight)
   }
 
   async startListener () {
-    await this.setStatus()
+    await this.setStatus(true)
     setInterval(await this.setStatus.bind(this), 2000)
   }
 }
